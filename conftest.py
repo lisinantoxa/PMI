@@ -14,6 +14,11 @@ def pytest_addoption(parser):
         action='store',
         help='"--password" Указать пароль пользователя'
     )
+    parser.addoption(
+        '--consumer',
+        action='store',
+        help='"--password" Указать тестового клиента'
+    )
 
 
 @pytest.fixture(scope='session')
@@ -31,6 +36,10 @@ def config_user_credentials(request):
     headers = {"Authorization": "Basic " + valid_credentials}
     return headers
 
+@pytest.fixture(scope='function')
+def config_consumer(request):
+    consumer = request.config.getoption(name='--consumer')
+    return consumer
 
 @pytest.fixture(scope='function')
 def auth_session_user(base_url, config_user_credentials):
