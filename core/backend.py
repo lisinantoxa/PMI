@@ -1,7 +1,7 @@
 from requests import Session
 
 from api import (
-    ClientApi,DevicesApi
+    ClientApi,DevicesApi,ProfCleansApi
 )
 
 
@@ -11,3 +11,4 @@ class Backend:
         self.session = Session()
         self.client_api = ClientApi(self.session, self.base_url)
         self.devices_api = DevicesApi(self.session, self.base_url)
+        self.prof_cleans_api = ProfCleansApi(self.session, self.base_url)

@@ -1,4 +1,5 @@
 from more_itertools.more import consumer
+from requests import request
 
 from core.common import BaseRandomizer
 
@@ -245,5 +246,53 @@ def get_linking_date_data(device1,
         "User": {
             "Code": "myahina@myizhora.net",
             "CodeSpace": "ActiveDirectory"
+        }
+    }
+
+
+def get_prof_clean_survey_json(request, device1, device2):
+    return {
+        "SalesPoint": {
+            "$type": "PMI.BDDM.Staticdata.POSReference",
+            "CodeSpace": "MDM",
+            "Code": "MS257434"
+        },
+        "User":
+            {
+                "$type": "PMI.BDDM.Staticdata.ADUserReference",
+                "Code": "MYIZHORA\\agnitets1",
+                "CodeSpace": "ActiveDirectory",
+                "Name": "Alexey Gnitetsky"
+            },
+        "ConsumerRequest": {
+            "$type": "PMI.BDDM.Transactionaldata.ConsumerCleaningRequestReference",
+            "Code": request,
+            "CodeSpace": "B2CCRM"
+        },
+        "SerialNumbers": [
+            device1,
+            device2
+        ]
+    }
+
+
+def get_prof_clean_survey_result_json(request, survey, result):
+    return {
+        "SurveyResult": f"{{\n\"result\": \"{result}\"\n}}",
+        "SurveyCode": survey,
+        "ConsumerRequest": {
+            "$type": "PMI.BDDM.Transactionaldata.ConsumerCleaningRequest",
+            "CodeSpace": "B2CCRM",
+            "Code": request,
+        },
+        "SalePoint": {
+            "$type": "PMI.BDDM.Staticdata.POSReference",
+            "CodeSpace": "MDM",
+            "Code": "MS257434"
+        },
+        "User": {
+            "$type": "PMI.BDDM.Staticdata.ADUserReference",
+            "CodeSpace": "ActiveDirectory",
+            "Code": "MYIZHORA\\alisin1"
         }
     }
