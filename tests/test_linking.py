@@ -17,16 +17,18 @@ from resources.test_data import SUCCESSFUL_200_RESPONSE_CODE, SUCCESSFUL_201_RES
 class TestLinkingApi:
 
     @mark.flaky(reruns=0, reruns_delay=60)
-    @title('Привязка iqos 3 duos')
-    def test_linking_iqos3duos(self, base_url, auth_session_user, config_user_credentials, config_consumer):
-        codes = ["BV002443", "BV002437"]
+    @title('Привязка двухкомпонентного устройства')
+    @mark.parametrize("codes", [
+        ["BV002443", "BV002437"],
+        ["BV007904", "BV007908"]
+    ])
+    def test_linking_duos_devices(self, base_url, auth_session_user, config_user_credentials, config_consumer, codes):
         device1, device2 = [get_device_create_json(code=code) for code in codes]
-        case_date = get_case_create_json(case_reason="LinkingDevice",
-                                         consumer=config_consumer)
-        create_device1 = auth_session_user.devices_api.create_devices(data=device1,
-                                                                      config_user_credentials=config_user_credentials)
-        create_device2 = auth_session_user.devices_api.create_devices(data=device2,
-                                                                      config_user_credentials=config_user_credentials)
+        case_date = get_case_create_json(case_reason="LinkingDevice", consumer=config_consumer)
+        create_device1, create_device2 = [
+            auth_session_user.devices_api.create_devices(data=device, config_user_credentials=config_user_credentials)
+            for device in [device1, device2]
+        ]
         auth_session_user.client_api.assert_response(current_response=create_device1,
                                                      expected_response=SUCCESSFUL_200_RESPONSE_CODE)
         auth_session_user.client_api.assert_response(current_response=create_device2,
