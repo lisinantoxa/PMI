@@ -8,7 +8,7 @@ from allure import (
 )
 
 from resources.data.regression_data import (
-    get_case_create_json, get_prof_clean_survey_json, get_device_create_json, get_prof_clean_survey_result_json)
+    get_case_create_json, get_prof_clean_survey_json, get_prof_clean_survey_result_json)
 from resources.test_data import SUCCESSFUL_200_RESPONSE_CODE, SUCCESSFUL_201_RESPONSE_CODE
 
 
