@@ -26,7 +26,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope='session')
 def base_url():
-    return 'https://b2ccrm-uat.myizapps.com'
+    return 'https://b2ccrm-preprod.myizapps.com'
 
 
 @pytest.fixture(scope='session')
