@@ -12,11 +12,11 @@ def pytest_addoption(parser):
     #     action='store',
     #     help='"--user" Указать логин пользователя'
     # )
-    parser.addoption(
-        '--password',
-        action='store',
-        help='"--password" Указать пароль пользователя'
-    )
+    # parser.addoption(
+    #     '--password',
+    #     action='store',
+    #     help='"--password" Указать пароль пользователя'
+    # )
     parser.addoption(
         '--consumer',
         action='store',
