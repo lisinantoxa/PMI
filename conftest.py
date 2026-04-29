@@ -7,11 +7,11 @@ from datetime import datetime
 
 
 def pytest_addoption(parser):
-    parser.addoption(
-        '--crm_user',
-        action='store',
-        help='"--user" Указать логин пользователя'
-    )
+    # parser.addoption(
+    #     '--crm_user',
+    #     action='store',
+    #     help='"--user" Указать логин пользователя'
+    # )
     parser.addoption(
         '--password',
         action='store',
