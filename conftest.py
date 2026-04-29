@@ -8,7 +8,7 @@ from datetime import datetime
 
 def pytest_addoption(parser):
     parser.addoption(
-        '--user',
+        '--crm_user',
         action='store',
         help='"--user" Указать логин пользователя'
     )
