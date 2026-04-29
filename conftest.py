@@ -17,11 +17,12 @@ def pytest_addoption(parser):
     #     action='store',
     #     help='"--password" Указать пароль пользователя'
     # )
-    parser.addoption(
-        '--consumer',
-        action='store',
-        help='"--password" Указать тестового клиента'
-    )
+    # parser.addoption(
+    #     '--consumer',
+    #     action='store',
+    #     help='"--password" Указать тестового клиента'
+    # )
+    pass
 
 
 @pytest.fixture(scope='session')
