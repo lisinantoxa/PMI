@@ -32,7 +32,7 @@ def base_url():
 @pytest.fixture(scope='session')
 def config_user_credentials(request):
     password = request.config.getoption(name='--password')
-    username = request.config.getoption(name='--user')
+    username = request.config.getoption(name='--crm_user')
     unicode_string = f'{username}:{password}'
     byte = unicode_string.encode('utf-8')
     valid_credentials = base64.b64encode(byte).decode("utf-8")

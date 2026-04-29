@@ -15,7 +15,7 @@ from allure import (
 @suite('API тесты по клиентам')
 class TestClientApi:
 
-    @mark.flaky(reruns=2, reruns_delay=60)
+    @mark.flaky(reruns=0, reruns_delay=60)
     @testit.workItemID("de93671f-7d86-4f39-80ac-61a0713d14a9")
     @title('Регистрации клиента')
     def test_client_reqistration(self, base_url, auth_session_user, config_user_credentials):
