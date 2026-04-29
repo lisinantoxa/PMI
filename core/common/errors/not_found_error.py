@@ -1,0 +1,6 @@
+from .base_api_error import BaseApiError
+
+
+class NotFoundError(BaseApiError):
+    def __init__(self, response):
+        super().__init__('Not Found', response)
