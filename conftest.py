@@ -7,22 +7,22 @@ from datetime import datetime
 
 
 def pytest_addoption(parser):
-    # parser.addoption(
-    #     '--crm_user',
-    #     action='store',
-    #     help='"--user" Указать логин пользователя'
-    # )
-    # parser.addoption(
-    #     '--password',
-    #     action='store',
-    #     help='"--password" Указать пароль пользователя'
-    # )
-    # parser.addoption(
-    #     '--consumer',
-    #     action='store',
-    #     help='"--password" Указать тестового клиента'
-    # )
-    pass
+    parser.addoption(
+        '--crm_user',
+        action='store',
+        help='"--user" Указать логин пользователя'
+    )
+    parser.addoption(
+        '--password',
+        action='store',
+        help='"--password" Указать пароль пользователя'
+    )
+    parser.addoption(
+        '--consumer',
+        action='store',
+        help='"--password" Указать тестового клиента'
+    )
+
 
 
 @pytest.fixture(scope='session')
