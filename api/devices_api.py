@@ -115,3 +115,21 @@ class DevicesApi(BaseApi):
             }
         except Exception as err:
             raise err
+
+    @allure.step('CRM.116 Скрытие устройства в личном кабинете')
+    def hide_or_display_device(self, data, config_user_credentials):
+        url = '/ServiceModel/consumerDevices/hideOrdisplayDevice'
+        try:
+            response = self.post(url=url, json=data, headers=config_user_credentials, external=True)
+            if response.status_code in (200, 400, 422):
+                result = json.loads(response.text)
+            elif response.status_code == 401:
+                result = response.text
+            else:
+                result = json.loads(response.text)
+            return {
+                'code': response.status_code,
+                'result': result
+            }
+        except Exception as err:
+            raise err

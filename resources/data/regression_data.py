@@ -1,6 +1,3 @@
-from more_itertools.more import consumer
-from requests import request
-
 from core.common import BaseRandomizer
 
 
