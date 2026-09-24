@@ -8,6 +8,7 @@ from resources.data.checkup_data import (
     get_checkup_validate_json,
     get_checkup_group_json,
 )
+from resources.test_data import CHECKUP_INBOUND_PROBLEM_CODE, CHECKUP_RESOLVE_REASON_CODE
 
 
 @testit.workItemID("8d89dfb5-3d60-4d47-a3f4-c93e2f93e46d")
@@ -83,5 +84,13 @@ class TestCheckupApi:
             with testit.step(f"CRM.232 Диагностический результат устройства {device}"):
                 diagnostic = checkup.get_diagnostic_result(config_consumer, device, config_user_credentials)
                 checkup.assert_success(diagnostic)
+
+        with testit.step('CRM.39 Проверка закрытого запроса чекап'):
+            request_info = auth_session_user.devices_api.get_consumer_request_with_inspections_acts_orders(
+                request_code=request_code,
+                config_user_credentials=config_user_credentials)
+            auth_session_user.client_api.assert_response(request_info, 200)
+            auth_session_user.client_api.assert_request_closed(
+                request_info, CHECKUP_INBOUND_PROBLEM_CODE, CHECKUP_RESOLVE_REASON_CODE)
 
         testit.addMessage(f"Флоу чекапа устройства успешно пройден по всем шагам и проверкам итоговых результатов. CRM.233 - {closed}")

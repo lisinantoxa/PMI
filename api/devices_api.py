@@ -133,3 +133,20 @@ class DevicesApi(BaseApi):
             }
         except Exception as err:
             raise err
+
+    @allure.step('CRM.39 Получение запроса')
+    def get_consumer_request_with_inspections_acts_orders(self, request_code, config_user_credentials):
+        response = self.get(
+            url='/ServiceModel/ConsumerRequests/GetConsumerRequestWithInspectionsActsOrders',
+            params={'filter': json.dumps({'CaseCode': request_code})},
+            headers=config_user_credentials,
+            external=True,
+        )
+        try:
+            result = response.json()
+        except ValueError:
+            result = response.text
+        return {
+            'code': response.status_code,
+            'result': result,
+        }
