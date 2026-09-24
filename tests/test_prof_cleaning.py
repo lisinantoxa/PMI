@@ -8,7 +8,9 @@ from allure import (
 
 from resources.data.regression_data import (
     get_case_create_json, get_prof_clean_survey_json, get_prof_clean_survey_result_json)
-from resources.test_data import SUCCESSFUL_200_RESPONSE_CODE, SUCCESSFUL_201_RESPONSE_CODE
+from resources.test_data import SUCCESSFUL_200_RESPONSE_CODE, SUCCESSFUL_201_RESPONSE_CODE, \
+    PROF_CLEANING_INBOUND_PROBLEM_CODE, PROF_CLEANING_NO_CLEANING_RESOLVE_REASON_CODE, \
+    PROF_CLEANING_REPLACEMENT_RESOLVE_REASON_CODE
 
 
 @testit.workItemID("d71f85d7-c5f1-4bbb-8a84-32d32d0fef58")
@@ -54,6 +56,13 @@ class TestProfCleaningApi:
 
         assert prof_clean_result["result"]["Message"] == "Диагностика проведена. Чистка устройства не требуется."
         assert prof_clean_result["result"]["Code"] == 200
+        with testit.step('CRM.39 Проверка закрытого запроса проф. чистки'):
+            request_info = auth_session_user.devices_api.get_consumer_request_with_inspections_acts_orders(
+                create_linking_case["result"]["ConsumerRequest"]["Code"], config_user_credentials)
+            auth_session_user.client_api.assert_response(request_info, SUCCESSFUL_200_RESPONSE_CODE)
+            auth_session_user.client_api.assert_request_closed(
+                request_info, PROF_CLEANING_INBOUND_PROBLEM_CODE,
+                PROF_CLEANING_NO_CLEANING_RESOLVE_REASON_CODE)
         testit.addMessage(f"Проф. чистка завершена успешно: {prof_clean_result['result']['Message']}")
 
     @mark.flaky(reruns=0, reruns_delay=60)
@@ -98,4 +107,11 @@ class TestProfCleaningApi:
             ' "Диагностика" для валидации возможных решений для клиента.'
         )
         assert prof_clean_result["result"]["Code"] == 202
+        with testit.step('CRM.39 Проверка закрытого запроса проф. чистки'):
+            request_info = auth_session_user.devices_api.get_consumer_request_with_inspections_acts_orders(
+                create_linking_case["result"]["ConsumerRequest"]["Code"], config_user_credentials)
+            auth_session_user.client_api.assert_response(request_info, SUCCESSFUL_200_RESPONSE_CODE)
+            auth_session_user.client_api.assert_request_closed(
+                request_info, PROF_CLEANING_INBOUND_PROBLEM_CODE,
+                PROF_CLEANING_REPLACEMENT_RESOLVE_REASON_CODE)
         testit.addMessage(f"Проф. чистка завершена с результатом замены: {prof_clean_result['result']['Message']}")

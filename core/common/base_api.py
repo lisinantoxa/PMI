@@ -130,3 +130,18 @@ class BaseApi:
                 raise BaseApiError('Client', response)
         elif 500 <= response.status_code < 600:
             raise ServerError(response)
+
+    @staticmethod
+    def assert_request_closed(response, inbound_problem, resolve_reason):
+        request = response['result']['Request']
+        assert request['Status'] == 'Closed', (
+            f"Ожидался статус запроса Closed, получен {request['Status']}"
+        )
+        assert request['InboundProblem']['Name'] == inbound_problem, (
+            f"Ожидался InboundProblem {inbound_problem}, "
+            f"получен {request['InboundProblem']}"
+        )
+        assert request['ResolveReason']['Name'] == resolve_reason, (
+            f"Ожидался ResolveReason {resolve_reason}, "
+            f"получен {request['ResolveReason']}"
+        )
