@@ -9,6 +9,7 @@ from resources.data.checkup_data import (
     get_checkup_group_json,
 )
 from resources.test_data import CHECKUP_INBOUND_PROBLEM_CODE, CHECKUP_RESOLVE_REASON_CODE
+from resources.testit_messages import add_flow_success_message
 
 
 @testit.workItemID("8d89dfb5-3d60-4d47-a3f4-c93e2f93e46d")
@@ -92,5 +93,18 @@ class TestCheckupApi:
             auth_session_user.client_api.assert_response(request_info, 200)
             auth_session_user.client_api.assert_request_closed(
                 request_info, CHECKUP_INBOUND_PROBLEM_CODE, CHECKUP_RESOLVE_REASON_CODE)
-
-        testit.addMessage(f"Флоу чекапа устройства успешно пройден по всем шагам и проверкам итоговых результатов. CRM.233 - {closed}")
+        add_flow_success_message(
+            flow_name="Чекап устройства",
+            request_code=request_code,
+            request=request_info['result']['Request'],
+            checks=[
+                "запрос чекапа создан",
+                "устройства провалидированы",
+                "опрос создан",
+                "результат опроса сохранён",
+                "запрос закрыт",
+                "CRM.39 подтвердил корректные значения",
+            ],
+            consumer=config_consumer,
+            devices=f"{device1}, {device2}",
+        )

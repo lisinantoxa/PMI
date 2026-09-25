@@ -12,6 +12,7 @@ from resources.data.regression_data import (get_link_data,
                                             get_device_create_json,
                                             get_case_create_json)
 from resources.test_data import SUCCESSFUL_200_RESPONSE_CODE, SUCCESSFUL_201_RESPONSE_CODE, SUCCESSFUL_422_RESPONSE_CODE
+from resources.testit_messages import add_flow_success_message
 
 
 @testit.workItemID("9d7a96d7-2024-4a95-93d5-f6d47f4a6edc")
@@ -79,5 +80,14 @@ class TestLinkingApi:
 
         assert set_date["result"]["BindingRequest"]["Items"][0]["Result"] == "SuccessfulBinding"
         assert set_date["result"]["BindingRequest"]["Items"][1]["Result"] == "SuccessfulBinding"
-        testit.addMessage(
-            f"Флоу привязки успешно завершен для устройств {device1['ProductInstance']['Code']} и {device2['ProductInstance']['Code']}. CRM.47 - {set_date}")
+        add_flow_success_message(
+            flow_name="Привязка устройств",
+            request_code=create_linking_case["result"]["ConsumerRequest"]["Code"],
+            checks=[
+                "запрос привязки создан",
+                "введена дата транзакции",
+                "проверен ответ SuccessfulBinding ",
+            ],
+            consumer=config_consumer,
+            devices=f"{device1}, {device2}",
+        )

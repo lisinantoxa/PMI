@@ -11,6 +11,8 @@ from allure import (
     suite
 )
 
+from resources.testit_messages import add_flow_success_message
+
 
 @suite('API тесты по клиентам')
 class TestClientApi:
@@ -49,11 +51,15 @@ class TestClientApi:
                                                              expected_response=SUCCESSFUL_200_RESPONSE_CODE)
                 auth_session_user.client_api.assert_client_info(send_info=new_client_info,
                                                                 response_info=client_info["result"])
-            testit.addMessage(f"Проверка полученной информации по клиенту прошла успешно.\n"
-                              f"\n"
-                              f"CRM.10 Response Body: {clients_new}\n"
-                              f"\n"
-                              f"CRM.04 Response Body: {client_info}")
+            add_flow_success_message(
+                flow_name="Создание клиента",
+                checks=[
+                    "клиент создан",
+                    "CRM.04 подтвердил корректные значения в crm",
+                ],
+                consumer=clients_new["result"]["ConsumerCode"],
+                client_info=client_info
+            )
         finally:
             auth_session_user.client_api.client_depersonalization(
                 depers_json=get_depersonalization_json(code=clients_new["result"]["ConsumerCode"]),

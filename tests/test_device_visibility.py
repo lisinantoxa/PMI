@@ -4,6 +4,7 @@ from pytest import mark
 
 from resources.data.device_visibility_data import get_hide_device_json
 from resources.test_data import SUCCESSFUL_200_RESPONSE_CODE
+from resources.testit_messages import add_flow_success_message
 
 
 @suite('API тесты по скрытию устройства')
@@ -34,6 +35,14 @@ class TestDeviceVisibilityApi:
             )
 
         assert hide_device["result"]["Message"] == "Устройство удалено из профиля клиента"
-        testit.addMessage(
-            f'Устройство {device} скрыто в личном кабинете клиента {config_consumer}. CRM.116 response: {hide_device}'
+        add_flow_success_message(
+            flow_name="Скрытие устройства WEB",
+            checks=[
+                "запрос успешно выполнен",
+                "message ответа соответствует ожидаемому",
+            ],
+            consumer=config_consumer,
+            device=device,
+            response=hide_device
         )
+
