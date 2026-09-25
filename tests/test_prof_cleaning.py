@@ -11,6 +11,7 @@ from resources.data.regression_data import (
 from resources.test_data import SUCCESSFUL_200_RESPONSE_CODE, SUCCESSFUL_201_RESPONSE_CODE, \
     PROF_CLEANING_INBOUND_PROBLEM_CODE, PROF_CLEANING_NO_CLEANING_RESOLVE_REASON_CODE, \
     PROF_CLEANING_REPLACEMENT_RESOLVE_REASON_CODE
+from resources.testit_messages import add_flow_success_message
 
 
 @testit.workItemID("d71f85d7-c5f1-4bbb-8a84-32d32d0fef58")
@@ -63,7 +64,18 @@ class TestProfCleaningApi:
             auth_session_user.client_api.assert_request_closed(
                 request_info, PROF_CLEANING_INBOUND_PROBLEM_CODE,
                 PROF_CLEANING_NO_CLEANING_RESOLVE_REASON_CODE)
-        testit.addMessage(f"Проф. чистка завершена успешно: {prof_clean_result['result']['Message']}")
+        add_flow_success_message(
+            flow_name="Проф. чистка",
+            request_code=create_linking_case["result"]["ConsumerRequest"]["Code"],
+            request=request_info['result']['Request'],
+            checks=[
+                "запрос чистки создан",
+                "результат опроса сохранён",
+                "запрос закрыт",
+                "CRM.39 подтвердил корректные значения",
+            ],
+            consumer=config_consumer
+        )
 
     @mark.flaky(reruns=0, reruns_delay=60)
     @title('Чистка устройства не помогла, необходима замена')
@@ -114,4 +126,15 @@ class TestProfCleaningApi:
             auth_session_user.client_api.assert_request_closed(
                 request_info, PROF_CLEANING_INBOUND_PROBLEM_CODE,
                 PROF_CLEANING_REPLACEMENT_RESOLVE_REASON_CODE)
-        testit.addMessage(f"Проф. чистка завершена с результатом замены: {prof_clean_result['result']['Message']}")
+        add_flow_success_message(
+            flow_name="Проф. чистка",
+            request_code=create_linking_case["result"]["ConsumerRequest"]["Code"],
+            request=request_info['result']['Request'],
+            checks=[
+                "запрос чистки создан",
+                "результат опроса сохранён",
+                "запрос закрыт",
+                "CRM.39 подтвердил корректные значения",
+            ],
+            consumer=config_consumer
+        )
