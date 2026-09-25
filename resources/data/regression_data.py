@@ -2,12 +2,14 @@ from core.common import BaseRandomizer
 
 
 def get_new_client_json(
-        Number=BaseRandomizer().phone(mask='79xxxxxxxxx'),
+        Number=None,
         BirthDate="2002-11-20",
         Gender="Female",
         Name="Елизавета",
         Surname="Алексеевна"
 ):
+    if Number is None:
+        Number = BaseRandomizer().phone(mask='79xxxxxxxxx')
     return {
         "$type": "PMI.POS.Services.Customers.Model.ClientFormValidateRequest",
         "$version": "1.0.0.0",
