@@ -9,30 +9,19 @@ from resources.testit_messages import add_flow_success_message
 
 @suite('API тесты по скрытию устройства')
 class TestDeviceVisibilityApi:
-    @mark.flaky(reruns=0, reruns_delay=60)
-    @testit.workItemID("1193671f-7d86-4f39-80ac-61a0713d14a9")
+
+    @mark.flaky(reruns=1, reruns_delay=60)
+    @testit.workItemID("1631")
     @title('Скрытие устройства в личном кабинете пользователя')
     def test_hide_device_in_web(
-            self,
-            auth_session_user,
-            config_user_credentials,
-            config_consumer,
-            create_device_and_link_to_consumer,
-    ):
+            self, auth_session_user, config_consumer, create_device_and_link_to_consumer):
         device = create_device_and_link_to_consumer[0]
 
         with testit.step('CRM.116 Скрытие устройства в ЛК пользователя'):
             hide_device = auth_session_user.devices_api.hide_or_display_device(
-                data=get_hide_device_json(
-                    consumer=config_consumer,
-                    device=device,
-                ),
-                config_user_credentials=config_user_credentials,
+                data=get_hide_device_json(consumer=config_consumer, device=device),
             )
-            auth_session_user.client_api.assert_response(
-                current_response=hide_device,
-                expected_response=SUCCESSFUL_200_RESPONSE_CODE,
-            )
+            auth_session_user.devices_api.assert_response(hide_device, SUCCESSFUL_200_RESPONSE_CODE)
 
         assert hide_device["result"]["Message"] == "Устройство удалено из профиля клиента"
         add_flow_success_message(
@@ -45,4 +34,3 @@ class TestDeviceVisibilityApi:
             device=device,
             response=hide_device
         )
-

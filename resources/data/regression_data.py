@@ -2,14 +2,14 @@ from core.common import BaseRandomizer
 
 
 def get_new_client_json(
-        Number=None,
+        number=None,
         BirthDate="2002-11-20",
         Gender="Female",
         Name="Елизавета",
         Surname="Алексеевна"
 ):
-    if Number is None:
-        Number = BaseRandomizer().phone(mask='79xxxxxxxxx')
+    if number is None:
+        number = BaseRandomizer().phone(mask='79xxxxxxxxx')
     return {
         "$type": "PMI.POS.Services.Customers.Model.ClientFormValidateRequest",
         "$version": "1.0.0.0",
@@ -32,7 +32,7 @@ def get_new_client_json(
                 "PhoneNumbers": [
                     {
                         "Type": "Mobile",
-                        "Number": Number
+                        "Number": number
                     }
                 ]
             },
@@ -91,8 +91,7 @@ def get_depersonalization_json(code):
     }
 
 
-def get_device_create_json(code,
-                           serial_number=None):
+def get_device_create_json(code, serial_number=None):
     if serial_number is None:
         serial_number = BaseRandomizer().random_string(string_length=14)
     return {
@@ -116,11 +115,11 @@ def get_device_create_json(code,
             "Code": code,
             "CodeSpace": "MDM",
             "Name": "Зарядное устройство IQOS 3 DUOS (золотой)"
-        }}
+        }
+    }
 
 
-def get_case_create_json(case_reason,
-                         consumer):
+def get_case_create_json(case_reason, consumer):
     return {
         "$type": "PMI.POS.Services.Surveys.Model.Case.CaseSearch+Request",
         "$version": "1.0.0.0",
@@ -145,10 +144,7 @@ def get_case_create_json(case_reason,
     }
 
 
-def get_link_data(device1,
-                  device2,
-                  consumer,
-                  request):
+def get_link_data(device1, device2, consumer, request):
     return {
         "$type": "PMI.POS.Services.LinkedObjects.Model.BindDevice+Request",
         "$version": "1.0.0.0",
@@ -189,13 +185,7 @@ def get_link_data(device1,
     }
 
 
-def get_linking_date_data(device1,
-                          device2,
-                          consumer,
-                          request,
-                          item1,
-                          item2,
-                          date):
+def get_linking_date_data(device1, device2, consumer, request, item1, item2, date):
     return {
         "$type": "PMI.POS.Services.LinkedObjects.Model.SetTransactionDate+Request",
         "$version": "1.0.0.0",
@@ -214,8 +204,7 @@ def get_linking_date_data(device1,
                         "Code": "MS257434",
                         "CodeSpace": "MDM"
                     }
-                }
-                ,
+                },
                 {
                     "ItemCode": item2,
                     "ProductInstance": {
@@ -256,28 +245,24 @@ def get_prof_clean_survey_json(request, device1, device2):
             "CodeSpace": "MDM",
             "Code": "MS257434"
         },
-        "User":
-            {
-                "$type": "PMI.BDDM.Staticdata.ADUserReference",
-                "Code": "MYIZHORA\\agnitets1",
-                "CodeSpace": "ActiveDirectory",
-                "Name": "Alexey Gnitetsky"
-            },
+        "User": {
+            "$type": "PMI.BDDM.Staticdata.ADUserReference",
+            "Code": "MYIZHORA\\agnitets1",
+            "CodeSpace": "ActiveDirectory",
+            "Name": "Alexey Gnitetsky"
+        },
         "ConsumerRequest": {
             "$type": "PMI.BDDM.Transactionaldata.ConsumerCleaningRequestReference",
             "Code": request,
             "CodeSpace": "B2CCRM"
         },
-        "SerialNumbers": [
-            device1,
-            device2
-        ]
+        "SerialNumbers": [device1, device2]
     }
 
 
 def get_prof_clean_survey_result_json(request, survey, result):
     return {
-        "SurveyResult": f"{{\n\"result\": \"{result}\"\n}}",
+        "SurveyResult": f'{{\n"result": "{result}"\n}}',
         "SurveyCode": survey,
         "ConsumerRequest": {
             "$type": "PMI.BDDM.Transactionaldata.ConsumerCleaningRequest",
