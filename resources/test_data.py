@@ -10,8 +10,8 @@ EXPECTED_422_RESPONSE_CODE = 422
 NEW_CLIENT_JSON = get_new_client_json()
 
 # Замена web: ответы опроса диагностики
-SURVEY_CHARGER_RESULT_108 = '{"charger":"108"}'  # Проблемы с электроникой
-SURVEY_CHARGER_RESULT_105 = '{"charger":"105"}'  # Физические повреждения
+SURVEY_CHARGER_RESULT_108 = '108'  # Проблемы с электроникой
+SURVEY_CHARGER_RESULT_105 = '105'  # Физические повреждения
 
 # Чекап
 CHECKUP_INBOUND_PROBLEM_CODE = 'Чекап'
