@@ -3,9 +3,7 @@ from allure import suite, title
 from pytest import mark
 
 from resources.data.replacement_data import (
-    get_init_product_inspection_json,
-    get_product_inspection_result_json,
-    get_retail_replacement_order_json,
+    get_init_inspection_json, get_inspection_result_json, get_replacement_order_json,
 )
 from resources.test_data import (
     SUCCESSFUL_200_RESPONSE_CODE,
@@ -28,20 +26,21 @@ REPLACEMENT_ORDER_SUCCESS_MESSAGE = 'Запрос сохранен'
 class TestReplacementApi:
 
     @testit.workItemID("1616")
-    @mark.flaky(reruns=1, reruns_delay=60)
+    @mark.flaky(reruns=0, reruns_delay=60)
     @title('Замена устройства через веб: диагностика и заказ на замену: проблема с электроникой')
     def test_device_replacement_web_flow_electronic_issue(
             self,
             auth_session_user,
-            config_consumer,
-            create_device_and_link_to_consumer,
+            create_client,
+            create_device_and_link_to_new_client,
     ):
-        device1, _ = create_device_and_link_to_consumer
+        consumer = create_client["code"]
+        device1, _ = create_device_and_link_to_new_client
         devices_api = auth_session_user.devices_api
 
         with testit.step("CRM.25 Инициация диагностики устройства"):
             inspection = devices_api.init_product_inspection(
-                data=get_init_product_inspection_json(config_consumer, device1),
+                data=get_init_inspection_json(consumer, device1),
             )
             devices_api.assert_response(inspection, SUCCESSFUL_200_RESPONSE_CODE)
 
@@ -55,10 +54,10 @@ class TestReplacementApi:
 
         with testit.step("CRM.27 Отправка результатов диагностики"):
             inspection_result = devices_api.save_product_inspection_result(
-                data=get_product_inspection_result_json(
-                    request=request_code,
-                    inspection=inspection_code,
-                    survey_result=SURVEY_CHARGER_RESULT_108,
+                data=get_inspection_result_json(
+                    consumer_request=request_code,
+                    product_inspection=inspection_code,
+                    result=SURVEY_CHARGER_RESULT_108,
                 ),
             )
             devices_api.assert_response(inspection_result, SUCCESSFUL_200_RESPONSE_CODE)
@@ -96,7 +95,7 @@ class TestReplacementApi:
 
         with testit.step("CRM.17 Запрос на создание заказа замены"):
             replacement_order = devices_api.create_retail_replacement_order(
-                data=get_retail_replacement_order_json(request=request_code),
+                data=get_replacement_order_json(consumer_request=request_code),
             )
             devices_api.assert_response(replacement_order, SUCCESSFUL_200_RESPONSE_CODE)
 
@@ -131,7 +130,7 @@ class TestReplacementApi:
                 "CRM.39 подтвердил корректные значения",
                 "причина открытия и решения клиента заполнены корректно"
             ],
-            consumer=config_consumer,
+            consumer=consumer,
             devices=f"{device1}",
             diagnostic=f'{inspected_items[0]["Result"]}',
             solution=EXPECTED_REPLACEMENT_SOLUTION_CODE
@@ -143,15 +142,16 @@ class TestReplacementApi:
     def test_device_replacement_web_flow_physical_damage(
             self,
             auth_session_user,
-            config_consumer,
-            create_device_and_link_to_consumer,
+            create_client,
+            create_device_and_link_to_new_client,
     ):
-        device1, _ = create_device_and_link_to_consumer
+        consumer = create_client["code"]
+        device1, _ = create_device_and_link_to_new_client
         devices_api = auth_session_user.devices_api
 
         with testit.step("CRM.25 Инициация диагностики устройства"):
             inspection = devices_api.init_product_inspection(
-                data=get_init_product_inspection_json(config_consumer, device1),
+                data=get_init_inspection_json(consumer, device1),
             )
             devices_api.assert_response(inspection, SUCCESSFUL_200_RESPONSE_CODE)
 
@@ -165,10 +165,10 @@ class TestReplacementApi:
 
         with testit.step("CRM.27 Отправка результатов диагностики"):
             inspection_result = devices_api.save_product_inspection_result(
-                data=get_product_inspection_result_json(
-                    request=request_code,
-                    inspection=inspection_code,
-                    survey_result=SURVEY_CHARGER_RESULT_105,
+                data=get_inspection_result_json(
+                    consumer_request=request_code,
+                    product_inspection=inspection_code,
+                    result=SURVEY_CHARGER_RESULT_105,
                 ),
             )
             devices_api.assert_response(inspection_result, SUCCESSFUL_200_RESPONSE_CODE)
@@ -206,7 +206,7 @@ class TestReplacementApi:
 
         with testit.step("CRM.17 Запрос на создание заказа замены"):
             replacement_order = devices_api.create_retail_replacement_order(
-                data=get_retail_replacement_order_json(request=request_code),
+                data=get_replacement_order_json(consumer_request=request_code),
             )
             devices_api.assert_response(replacement_order, SUCCESSFUL_200_RESPONSE_CODE)
 
@@ -241,7 +241,7 @@ class TestReplacementApi:
                 "CRM.39 подтвердил корректные значения",
                 "причина открытия и закрытия заполнены корректно"
             ],
-            consumer=config_consumer,
+            consumer=consumer,
             devices=f"{device1}",
             diagnostic=f'{inspected_items[0]["Result"]}',
             solution=EXPECTED_REPLACEMENT_SOLUTION_CODE_AFTER_PHYSICAL_DAMAGE

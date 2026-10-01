@@ -91,7 +91,7 @@ def get_depersonalization_json(code):
     }
 
 
-def get_device_create_json(code, serial_number=None):
+def get_device_create_json(code, serial_number=None, consumer=None):
     if serial_number is None:
         serial_number = BaseRandomizer().random_string(string_length=14)
     return {
@@ -102,7 +102,7 @@ def get_device_create_json(code, serial_number=None):
             "CodeSpace": "ActiveDirectory"
         },
         "Consumer": {
-            "Code": "CONS7971378",
+            "Code": consumer or "CONS7971378",
             "CodeSpace": "B2CCRM"
         },
         "ProductInstance": {
